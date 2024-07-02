@@ -1,0 +1,132 @@
+# import resouces and menu dictionaries
+from menu import resources, MENU
+
+""" option + shift + A ---> block comment """
+
+""" PROGRAM REQUIREMENTS
+    1. Print report
+
+    print out all remain resources including Water, Milk, Coffee, Money
+
+    2. Check resources sufficient
+
+    look thru all remain resources -- check it against the recipe of the drink -- tells the user if there is insufficient resources (as long as one resource is not sufficient)
+    -- drink CANNOT be made -- print the feedback to the user
+
+    3. Coin payment
+
+    * small gold coin ($2)
+    * large gold coin ($1)
+    * 50 cents
+    * 20 cents
+    * 10 cents
+    * 5 cents
+
+    user choose DRINK --> ask user to INSERT the quantity of each COINS (how many $2 coin? how many $1? etc.)
+    --> if user doesn't insert enough coins --> print out feedback and refund the coins
+    --> if user inserts enough coins --> calculate how much money all of these coins are worth --> calculate the CHANGE based on the cost of the drink 
+    --> hand user the DRINK 
+
+    4. Check transaction successful
+
+    program must:
+        DEDUCT the RESOURCES if user sucessfully paid for their drink
+        ADD money to the tilt
+    
+    5. Make the coffee
+
+ """
+
+
+
+# Receive first input from user
+
+def initial_quest():
+    
+    print("\n\n ☕️ THANKS FOR USING TAMMY'S COFFEE MACHINE  ☕️ \n\n")
+
+    user_drink = input("What would you like to order? espresso/ latte/ cappuccino: \n").lower()
+
+    return user_drink
+
+
+# function print_drink() : Print out user choice of drink if it exists in the MENU
+
+def print_drink(input):
+
+    drink_checker = [key for key, value in MENU.items() if key == input] #--> array
+
+    match_drink = ""
+
+    if drink_checker: 
+
+        # convert result to string
+        match_drink = drink_checker[0]
+        print(f"You have chose {match_drink}")
+
+        return match_drink
+
+def resource_checker(selected_drink):
+    # Check if the selected drink is in the MENU
+    if selected_drink not in MENU:
+        
+        print("Selected drink is not available.")
+        return
+    
+    # Get the ingredients required for the selected drink
+    required_ingredients = MENU[selected_drink]["ingredients"]
+    
+    # Check each ingredient in the required ingredients
+    for item, required_amount in required_ingredients.items():
+        if resources[item] < required_amount:
+            print(f"\n oh No, We're running out of {item} for your {selected_drink}.")
+            return
+    
+    print("Still have enough resources for your drink.")
+                        
+    
+
+
+# machine_controller() --> switch off the coffee machine when barista wants to
+
+def machine_controller():
+
+    machine_state = True
+
+    # Barista can use secret word ("off") to turn off the machine, end execution
+
+    barista_order = input("Would you like to switch off our coffee machine? Type on or off: \n").lower()
+
+    if barista_order == "off":
+        machine_state = False
+        
+        return machine_state
+    else:
+        machine_state = True
+
+        return machine_state
+    
+# print_report() ---> receive input from user, and print out the report if user's input is report
+def print_report(input):
+
+    # when user enters "report" to the prompt --> remain resources must be printed
+    # must retrieve from resources dictionary
+    if input == "report":
+        for item in resources:
+            if item == "water" or item == "milk":
+                print(f"{item}: {resources[item]}ml")
+            elif item == "coffee":
+                print(f"{item}: {resources[item]}g")
+    
+# Main Run
+
+my_customer_response = initial_quest()
+
+customer_drink = print_drink(my_customer_response)
+
+resource_checker(customer_drink)
+
+""" Test: retrieve value from MENU
+
+for drink in MENU:
+    print(MENU[drink]["ingredients"]["coffee"]) """
