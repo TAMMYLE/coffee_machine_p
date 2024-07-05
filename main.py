@@ -62,7 +62,7 @@ def print_drink(input):
 
         # convert result to string
         match_drink = drink_checker[0]
-        print(f"You have chose {match_drink}")
+        print(f"You have chose {match_drink}. \n")
 
         return match_drink
 
@@ -81,31 +81,74 @@ def resource_checker(selected_drink):
         if resources[item] < required_amount:
             print(f"\n oh No, We're running out of {item} for your {selected_drink}.")
             return
+   
+    # Ask user to insert coins 
+    total_payment_received = initial_payment()
     
-    print("Still have enough resources for your drink.")
-                        
+    # Calculate the change
+    transaction_checker(selected_drink, total_payment_received)
+
+    # Add user payment to tilt
+    # Hand the drink to user
+
+    # print(f"Here is your {selected_drink}. Enjoy!!")
+
     
 
+def initial_payment():
+   """ 
+    * small gold coin ($2)
+    * large gold coin ($1)
+    * 50 cents
+    * 20 cents
+    * 10 cents
+    """ 
+   print("\n Please insert coins \n")
+   two_dollar = int(input("How many $2 coins?: \n"))
+   one_dollar = int(input("How many $1 coins?: \n"))
+   fifty_cent = int(input("How many 50 cents?: \n"))
+   twenty_cent = int(input("How many 20 cents?: \n"))
+   ten_cent = int(input("How many 10 cents?: \n"))
 
-# machine_controller() --> switch off the coffee machine when barista wants to
+   total_receive = (two_dollar * 2) + (one_dollar * 1) + (fifty_cent * 0.5) + (twenty_cent * 0.2) + (ten_cent * 0.1)
 
-def machine_controller():
+   return total_receive
 
-    machine_state = True
+# Return True if payment is sufficient and False when payment is not
+def transaction_checker(selected_drink, amount):
 
-    # Barista can use secret word ("off") to turn off the machine, end execution
+    drink_cost = MENU[selected_drink]["cost"]
+    drink_ingredients = MENU[selected_drink]["ingredients"]
 
-    barista_order = input("Would you like to switch off our coffee machine? Type on or off: \n").lower()
-
-    if barista_order == "off":
-        machine_state = False
+    if amount < drink_cost:
+        print("Sorry that's not enough money. Money refunded.\n")
+        return False
+    
+    elif amount == drink_cost:
+        resources["money"] = amount
+        make_coffee(selected_drink, drink_ingredients)
+        return True
+    
+    elif amount > drink_cost:
         
-        return machine_state
-    else:
-        machine_state = True
+        change = amount - drink_cost
+        print(f"Here is {change:.2f} dollars in change.\n")
 
-        return machine_state
-    
+        resources["money"] = drink_cost
+
+        make_coffee(selected_drink, drink_ingredients)
+
+        return True
+
+# make_coffee()
+def make_coffee(selected_drink, ingredient_usage):
+    """ deduct ingredients from resources """
+    for item in ingredient_usage:
+
+        resources[item] -= ingredient_usage[item]
+
+    print(f"Here is your {selected_drink}. Enjoy!!!\n")
+
 # print_report() ---> receive input from user, and print out the report if user's input is report
 def print_report(input):
 
@@ -119,12 +162,39 @@ def print_report(input):
                 print(f"{item}: {resources[item]}g")
     
 # Main Run
+# machine_control -- switch off the coffee machine when barista wants to
 
-my_customer_response = initial_quest()
+machine_state = True
 
-customer_drink = print_drink(my_customer_response)
+# Barista can use secret word ("off") to turn off the machine, end execution
+while machine_state:
 
-resource_checker(customer_drink)
+    barista_order = input("Would you like to switch off our coffee machine? Type on or off: \n").lower()
+
+    if barista_order == "off":
+
+        machine_state = False
+        
+    else:
+        customer_response = initial_quest()
+
+        customer_drink = print_drink(customer_response)
+
+        resource_checker(customer_drink)
+
+        customer_payment = initial_payment()
+
+        transaction_checker(customer_drink, customer_payment)
+
+        machine_state = True
+
+
+
+
+
+
+
+
 
 """ Test: retrieve value from MENU
 
