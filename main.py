@@ -59,7 +59,7 @@ def resource_checker(selected_drink):
     if selected_drink not in MENU:
         
         print("Selected drink is not available.")
-        return
+        return False
     
     # Get the ingredients required for the selected drink
     required_ingredients = MENU[selected_drink]["ingredients"]
@@ -68,7 +68,7 @@ def resource_checker(selected_drink):
     for item, required_amount in required_ingredients.items():
         if resources[item] < required_amount:
             print(f"\n oh No, We're running out of {item} for your {selected_drink}.")
-            return
+            return False
    
     # Ask user to insert coins 
     total_payment_received = initial_payment()
@@ -79,9 +79,6 @@ def resource_checker(selected_drink):
     # Add user payment to tilt
     # Hand the drink to user
 
-    # print(f"Here is your {selected_drink}. Enjoy!!")
-
-    
 
 def initial_payment():
    """ 
@@ -148,7 +145,7 @@ def print_report():
             print(f"{item}: {resources[item]}g")
         elif item == "money":
             print(f"{item}: ${resources[item]}")
-    
+
 # Main Run
 # machine_control -- switch off the coffee machine when barista wants to
 
@@ -164,7 +161,7 @@ while machine_state:
     if barista_quest == "off":
 
         machine_state = False
-        
+
     elif barista_quest == "report":
         print_report()
 
@@ -174,21 +171,4 @@ while machine_state:
 
         resource_checker(customer_drink)
 
-        customer_payment = initial_payment()
-
-        transaction_checker(customer_drink, customer_payment)
-
         machine_state = True
-
-
-
-
-
-
-
-
-
-""" Test: retrieve value from MENU
-
-for drink in MENU:
-    print(MENU[drink]["ingredients"]["coffee"]) """
