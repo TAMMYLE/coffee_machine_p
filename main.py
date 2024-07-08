@@ -38,18 +38,6 @@ from menu import resources, MENU
  """
 
 
-
-# Receive first input from user
-
-def initial_quest():
-    
-    print("\n\n ☕️ THANKS FOR USING TAMMY'S COFFEE MACHINE  ☕️ \n\n")
-
-    user_drink = input("What would you like to order? espresso/ latte/ cappuccino: \n").lower()
-
-    return user_drink
-
-
 # function print_drink() : Print out user choice of drink if it exists in the MENU
 
 def print_drink(input):
@@ -150,15 +138,16 @@ def make_coffee(selected_drink, ingredient_usage):
     print(f"Here is your {selected_drink}. Enjoy!!!\n")
 
 # print_report() ---> receive input from user, and print out the report if user's input is report
-def print_report(input):
-
+def print_report():
     # when user enters "report" to the prompt --> remain resources must be printed
     # must retrieve from resources dictionary
-        for item in resources:
-            if item == "water" or item == "milk":
-                print(f"{item}: {resources[item]}ml")
-            elif item == "coffee":
-                print(f"{item}: {resources[item]}g")
+    for item in resources:
+        if item == "water" or item == "milk":
+            print(f"{item}: {resources[item]}ml")
+        elif item == "coffee":
+            print(f"{item}: {resources[item]}g")
+        elif item == "money":
+            print(f"{item}: ${resources[item]}")
     
 # Main Run
 # machine_control -- switch off the coffee machine when barista wants to
@@ -168,16 +157,20 @@ machine_state = True
 # Barista can use secret word ("off") to turn off the machine, end execution
 while machine_state:
 
-    barista_order = input("Would you like to switch off our coffee machine? Type on or off: \n").lower()
+    print("\n\n ☕️ THANKS FOR USING TAMMY'S COFFEE MACHINE  ☕️ \n\n")
 
-    if barista_order == "off":
+    barista_quest = input("What would you like to order? espresso/ latte/ cappuccino: \n").lower()
+
+    if barista_quest == "off":
 
         machine_state = False
         
-    else:
-        customer_response = initial_quest()
+    elif barista_quest == "report":
+        print_report()
 
-        customer_drink = print_drink(customer_response)
+    else:
+
+        customer_drink = print_drink(barista_quest)
 
         resource_checker(customer_drink)
 
