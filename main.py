@@ -111,7 +111,7 @@ def transaction_checker(selected_drink, amount):
     
     elif amount == drink_cost:
         resources["money"] = amount
-        make_coffee(selected_drink, drink_ingredients)
+        make_coffee(selected_drink, drink_ingredients, amount)
         return True
     
     elif amount > drink_cost:
@@ -121,16 +121,19 @@ def transaction_checker(selected_drink, amount):
 
         resources["money"] = drink_cost
 
-        make_coffee(selected_drink, drink_ingredients)
+        make_coffee(selected_drink, drink_ingredients, drink_cost)
 
         return True
 
-# make_coffee()
-def make_coffee(selected_drink, ingredient_usage):
+# make_coffee() --> based on the allowance, drink will be made, ingredient anount to use will be deducted as well as the payment will be added on
+def make_coffee(selected_drink, ingredient_usage, earnings):
     """ deduct ingredients from resources """
+    """ add customer payment to money """
     for item in ingredient_usage:
-
-        resources[item] -= ingredient_usage[item]
+        if item == "money":
+            resources[item] += earnings
+        else:
+            resources[item] -= ingredient_usage[item]     
 
     print(f"Here is your {selected_drink}. Enjoy!!!\n")
 
