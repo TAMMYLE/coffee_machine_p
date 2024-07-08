@@ -154,7 +154,6 @@ def print_report(input):
 
     # when user enters "report" to the prompt --> remain resources must be printed
     # must retrieve from resources dictionary
-    if input == "report":
         for item in resources:
             if item == "water" or item == "milk":
                 print(f"{item}: {resources[item]}ml")
