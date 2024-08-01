@@ -1,5 +1,10 @@
 # import resouces and menu dictionaries
+from dataclasses import field, fields
 from menu import resources, MENU
+from prettytable import PrettyTable
+
+table = PrettyTable()
+
 
 """ option + shift + A ---> block comment """
 
@@ -37,12 +42,23 @@ from menu import resources, MENU
 
  """
 
+# function print_menu() -- using pretty table to display list of drink
+
+def print_menu():
+
+    table.field_names = ["Drink", "Price"]
+    for name, details in MENU.items():
+        price = details["cost"]
+        table.add_row([name, price])
+    print(table)
+    print("\n")
+    
 
 # function print_drink() : Print out user choice of drink if it exists in the MENU
 
 def print_drink(input):
 
-    drink_checker = [key for key, value in MENU.items() if key == input] #--> array
+    drink_checker = [key for key in MENU.items() if key == input] #--> array
 
     match_drink = ""
 
@@ -159,7 +175,9 @@ while machine_state:
 
     print("\n\n ☕️ THANKS FOR USING TAMMY'S COFFEE MACHINE  ☕️ \n\n")
 
-    barista_quest = input("What would you like to order? espresso/ latte/ cappuccino: \n").lower()
+    print_menu()
+
+    barista_quest = input("What would you like to order?off \n").lower()
 
     if barista_quest == "off":
 
